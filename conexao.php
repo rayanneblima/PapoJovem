@@ -1,8 +1,8 @@
 <?php
 //Fazendo conexão com o banco.
-$host = "sql108.epizy.com";
-$user="epiz_22330010";
-$pass="rayanne22";
+$host = "";
+$user="";
+$pass="";
 $banco = "epiz_22330010_papojovem";
 ini_set('default_charset', 'UTF-8'); 
 $conexao = mysqli_connect($host,$user,$pass,$banco) or die(mysqli_error());
