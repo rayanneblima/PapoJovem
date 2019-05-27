@@ -1,8 +1,4 @@
-<?php
-
-include 'conexao.php';
-
-?>
+<?php include 'conexao.php';?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -40,6 +36,7 @@ include 'conexao.php';
 						<h1 class="logo">Papo Jovem!</h1>
 						<h3 class="logo">Sexualidade, DST/AIDS e adolescência:</h3>
 						<h3><b><u>vamos conversar?!</u></b></h3>
+                        <div align="right"><img src="https://contador.s12.com.br/img-7Z5bd3Z1zZWzcZ6A-6.gif" border="0" alt="contador de visitas"><script type="text/javascript" src="https://contador.s12.com.br/ad.js?id=7Z5bd3Z1zZWzcZ6A"></script><style>#parceiroafiliado { font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#999999;} #parceiroafiliado a:link {color:#999999; text-decoration:none; } #parceiroafiliado a:hover {color:#999999; text-decoration:none; } #parceiroafiliado a:visited {color:#999999; text-decoration:none; }</style></div>
 					</div>
 				</header>
 			</div>
@@ -68,10 +65,25 @@ include 'conexao.php';
 	</div>
 
 	<article><center>
-		<?php
-						
-			$resultado = mysqli_query($conexao, "SELECT * FROM noticias ORDER BY id_noticias DESC");
-			$linhas = mysqli_num_rows($resultado); 
+    <?php
+        //verifica a página atual caso seja informada na URL, senão atribui como 1ª página 
+        $pagina = (isset($_GET['pagina']))? $_GET['pagina'] : 1; 
+      
+        //seleciona todos os itens da tabela 
+        $cmd = "SELECT * FROM noticias WHERE categoria=0"; 
+        $produtos = mysqli_query($conexao,$cmd); 
+        //conta o total de itens 
+        $total = mysqli_num_rows($produtos); 
+        //seta a quantidade de itens por página, neste caso, 2 itens 
+        $registros = 12; 
+        //calcula o número de páginas arredondando o resultado para cima 
+        $numPaginas = ceil($total/$registros); 
+        //variavel para calcular o início da visualização com base na página atual 
+        $inicio = ($registros*$pagina)-$registros; 
+        //seleciona os itens por página 
+        $cmd = "SELECT * FROM noticias WHERE categoria=0 ORDER BY id_noticias DESC LIMIT $inicio,$registros"; 
+        $resultado = mysqli_query($conexao, $cmd); 
+        $linhas = mysqli_num_rows($resultado); 
 			echo'<style type="text/css">
 				table {
 					border: 1px solid grey;
@@ -118,10 +130,25 @@ include 'conexao.php';
 					echo '</td></tr></table></a>';
 				}
 			}
+
+            echo '<br><br>';
+            //exibe a paginação
+            $anterior = ($pagina - 1);
+            if ($pagina > 1){
+                echo "  <a href=\"?pagina=$anterior\">|Anterior</a>";
+            }
+            for($i = 1; $i < $numPaginas + 1; $i++) { 
+            echo "<a href='?pagina=$i'>|".$i."|</a>"; 
+            }
+            if ($pagina < $numPaginas){
+                $proxima = ($pagina + 1);
+                echo "<a href=\"?pagina=$proxima\">Próxima|</a>";
+            }
+            
+
+			
 			mysqli_close($conexao);
-
 			?>
-
 	<br><br></center>
 	</article>
 	<br><br>
@@ -129,7 +156,7 @@ include 'conexao.php';
 		<div class="linha">
 			<footer>
 				<div class="coluna col12">
-					<span>© 2018 PAPO JOVEM! <br /> 
+					<span>© 2018 PAPO JOVEM! <br> 
 					Desenvolvido por: Laboratório de Multimídia Interativa - LAMIF, IFSEMG Campus Rio Pomba</span>
 				</div>
 			</footer>
@@ -145,13 +172,5 @@ include 'conexao.php';
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/daterangepicker/moment.min.js"></script>
-	<script src="vendor/daterangepicker/daterangepicker.js"></script>
-<!--===============================================================================================-->
-	<script src="vendor/countdowntime/countdowntime.js"></script>
-<!--===============================================================================================-->
-	<script src="js/readmore.js"></script>
 
-</body>
-</html>	
+	</body></html>
