@@ -1,17 +1,11 @@
 <?php
+header('Content-type: text/html; charset=utf-8;');
 //Fazendo conexão com o banco.
-$host = "";
-$user="";
+$host = "127.0.0.1";
+$user="root";
 $pass="";
-$banco = "epiz_22330010_papojovem";
-ini_set('default_charset', 'UTF-8'); 
+$banco = "bd_papojovem";
 $conexao = mysqli_connect($host,$user,$pass,$banco) or die(mysqli_error());
-$conexao->query("SET NAMES utf8"); 
 mysqli_select_db($conexao,$banco) or die(mysqli_error());
-
-//Faz o PHP aceitar acentos na hora de exibir
-header('Content-type: text/html; charset=UTF-8');
-
-//inicia sessão se usuario correto
-session_start(); 
+session_start();
 ?>
